@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkxufew0ta5hl"]
+[gd_scene load_steps=6 format=3 uid="uid://dkxufew0ta5hl"]
 
+[ext_resource type="Script" uid="uid://oit8py3nuqn3" path="res://Scripts/ChartDispatcher.gd" id="1_c7ra2"]
 [ext_resource type="PackedScene" uid="uid://ckj7iynudrlqj" path="res://Scenes/UI_MasterHeader.tscn" id="1_rdac1"]
+[ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2_nglrg"]
+[ext_resource type="Script" uid="uid://boeifxhmmh370" path="res://Scripts/chart_manager.gd" id="2_ork68"]
+[ext_resource type="Script" uid="uid://chjbgk3pes02i" path="res://Scripts/spin_box.gd" id="4_dtcac"]
 
 [node name="ControlRoot" type="CanvasLayer"]
 
@@ -10,12 +14,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_c7ra2")
 
 [node name="UI_MasterHeader" parent="FullContainer_VBox" instance=ExtResource("1_rdac1")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="GraphContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -44,6 +50,41 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="FooterContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox"]
+[node name="ChartManager" type="Control" parent="FullContainer_VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_ork68")
+
+[node name="Chart" parent="FullContainer_VBox/ChartManager" instance=ExtResource("2_nglrg")]
+layout_mode = 1
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="FullContainer_VBox"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+color = Color(0.28668356, 0.2866836, 0.28668356, 1)
+
+[node name="FooterContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox/ColorRect"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
+layout_mode = 2
+text = "Dimension"
+
+[node name="SpinBox" type="SpinBox" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
+layout_mode = 2
+min_value = 1.0
+max_value = 20.0
+value = 1.0
+update_on_text_changed = true
+script = ExtResource("4_dtcac")
+
+[connection signal="value_changed" from="FullContainer_VBox/ColorRect/FooterContainer_HBox/SpinBox" to="FullContainer_VBox/ColorRect/FooterContainer_HBox/SpinBox" method="_on_value_changed"]
