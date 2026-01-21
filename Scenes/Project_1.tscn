@@ -4,42 +4,46 @@
 
 [node name="ControlRoot" type="CanvasLayer"]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="FullContainer_VBox" type="VBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UI_MasterHeader" parent="VBoxContainer" instance=ExtResource("1_rdac1")]
+[node name="UI_MasterHeader" parent="FullContainer_VBox" instance=ExtResource("1_rdac1")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="GraphContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="LHSContaier_VBox" type="VBoxContainer" parent="FullContainer_VBox/GraphContainer_HBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="YAxisContainer_VBox" type="VBoxContainer" parent="FullContainer_VBox/GraphContainer_HBox/LHSContaier_VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="Spacer_Panel" type="Panel" parent="FullContainer_VBox/GraphContainer_HBox/LHSContaier_VBox"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="RHSContainer_VBox" type="VBoxContainer" parent="FullContainer_VBox/GraphContainer_HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="Graph_Panel" type="Panel" parent="FullContainer_VBox/GraphContainer_HBox/RHSContainer_VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="XAxisContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox/GraphContainer_HBox/RHSContainer_VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="FooterContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
