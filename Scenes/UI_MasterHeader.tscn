@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://ckj7iynudrlqj"]
+[gd_scene load_steps=3 format=3 uid="uid://ckj7iynudrlqj"]
+
+[ext_resource type="Script" uid="uid://b01kfr1xheldj" path="res://Scripts/ui_master_header.gd" id="1_a2i4h"]
+[ext_resource type="Script" uid="uid://ctit4qkn4qvxy" path="res://Scripts/ClearButton.gd" id="1_gg4m4"]
 
 [node name="UI_MasterHeader" type="Control"]
 layout_mode = 3
@@ -7,21 +10,36 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_a2i4h")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 0.05
+anchor_bottom = 0.048
+offset_bottom = -0.10400009
 grow_horizontal = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="Button" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" node_paths=PackedStringArray("root")]
 layout_mode = 2
 text = "Clear"
+script = ExtResource("1_gg4m4")
+root = NodePath("../../../..")
+
+[node name="MenuButton" type="MenuButton" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Project"
+item_count = 1
+popup/item_0/text = "1"
+popup/item_0/id = 0
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/Button" to="PanelContainer/MarginContainer/HBoxContainer/Button" method="_on_pressed"]
