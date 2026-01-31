@@ -20,10 +20,11 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer" node_paths=PackedStringArray("masterHeader")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_scax6")
+masterHeader = NodePath("../../UI_MasterHeader")
 
 [node name="ColorRect" type="PanelContainer" parent="FullContainer_VBox"]
 custom_minimum_size = Vector2(0, 30)

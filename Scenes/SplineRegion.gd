@@ -2,28 +2,37 @@ class_name SplineRegion
 
 extends TextureRect 
 
+@export var masterHeader: Control
+
 @onready var camera: Camera2D = get_viewport().get_camera_2d()
 
+enum DrawStyle
+{
+	NLI,
+	BBForm,
+	MidpointSubdivision,
+}
+
+var style: DrawStyle = DrawStyle.NLI
 var points: Array[Vector2]
 
+func Clear() -> void:
+	points.clear()
+	queue_redraw()
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	masterHeader.connect( "ClearScreen", Clear )
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left click"):
 		points.append( event.position )
-		print( event.position )
 		queue_redraw()
 
 func _draw() -> void:
 	for point: Vector2 in points:
 		draw_circle( point, 5, Color.RED )
 
-	pass
+	if style == DrawStyle.NLI:
+		for i: int in points.size() - 1:
+			draw_line( points[i], points[ i + 1 ], Color( 0, 0, 1, .5 ), 2 )
+			pass
