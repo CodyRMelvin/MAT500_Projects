@@ -39,7 +39,7 @@ root = NodePath("../../../..")
 layout_mode = 2
 text = "Project"
 item_count = 1
-popup/item_0/text = "1"
+popup/item_0/text = "2"
 popup/item_0/id = 0
 
 [connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/Button" to="PanelContainer/MarginContainer/HBoxContainer/Button" method="_on_pressed"]

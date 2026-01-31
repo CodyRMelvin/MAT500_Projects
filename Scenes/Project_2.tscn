@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkxufew0ta5hl"]
+
+[ext_resource type="PackedScene" uid="uid://ckj7iynudrlqj" path="res://Scenes/UI_MasterHeader.tscn" id="2_dwb11"]
+[ext_resource type="Script" uid="uid://cnhkgnqdic35g" path="res://Scenes/SplineRegion.gd" id="2_scax6"]
+
+[node name="ControlRoot" type="CanvasLayer"]
+
+[node name="FullContainer_VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UI_MasterHeader" parent="FullContainer_VBox" instance=ExtResource("2_dwb11")]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="FullContainer_VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_scax6")
+
+[node name="ColorRect" type="PanelContainer" parent="FullContainer_VBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="FooterContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox/ColorRect"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(577, 325)
