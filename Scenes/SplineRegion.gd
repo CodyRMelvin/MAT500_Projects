@@ -22,6 +22,19 @@ func Clear() -> void:
 	points.clear()
 	queue_redraw()
 
+func GetNearestPointRef( point: Vector2 ) -> int:
+	var distance: float = 1.79769e308
+	var chosenPointRef: int = 0;
+
+	for i: int in points.size():
+		var currentLength: float = ( points[i] - point ).length()
+		
+		if currentLength < distance:
+			chosenPointRef = i 
+			distance = currentLength
+
+	return chosenPointRef
+
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", Clear )
 
@@ -30,21 +43,16 @@ func _gui_input(event: InputEvent) -> void:
 		points.append( event.position )
 		queue_redraw()
 
-	if event.is_action_pressed("right click"):
+	if event.is_action_pressed("right click") && !points.is_empty():
 		isDragging = true
-		var distance: float = 1.79769e308
-		var mousePos: Vector2 = event.position
-		print("test")
-
-		for i: int in points.size():
-			var currentLength: float = ( points[i] - mousePos ).length()
-			
-			if currentLength < distance:
-				dragPointRef = i 
-				distance = currentLength
+		dragPointRef =  GetNearestPointRef(event.position)
 
 	if event.is_action_released("right click"):
 		isDragging = false
+
+	if event.is_action_pressed("middle click") && !points.is_empty():
+		points.remove_at( GetNearestPointRef( event.position ) )
+		queue_redraw()
 		
 func _process( _delta: float ) -> void:
 	if isDragging:
