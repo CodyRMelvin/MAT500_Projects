@@ -3,6 +3,11 @@ class_name SplineRegion
 extends TextureRect 
 
 @export var masterHeader: Control
+@export var granularity: int = 100
+@export var pointColor: Color = Color.RED
+@export var pointRadius: float = 5
+@export var shellColor: Color = Color( 0, 0, 1, .25 )
+@export var shellWidth: float = 2
 
 @onready var camera: Camera2D = get_viewport().get_camera_2d()
 
@@ -17,6 +22,7 @@ var style: DrawStyle = DrawStyle.NLI
 var points: Array[Vector2]
 var isDragging: bool = false
 var dragPointRef: int
+var t: float = 0.5
 
 func Clear() -> void:
 	points.clear()
@@ -34,6 +40,41 @@ func GetNearestPointRef( point: Vector2 ) -> int:
 			distance = currentLength
 
 	return chosenPointRef
+
+func DrawNLI() -> void:
+	if points.size() < 2:
+		return
+
+	# drawing shells
+	var shellPoints = [ points ]
+	var shellPointBuffer: Array[Vector2]
+	var i: int = 0
+	
+	while i > -1:
+		for j: int in shellPoints[i].size() - 1:
+			shellPointBuffer.append( lerp( shellPoints[i][j], shellPoints[i][ j + 1 ], t ))
+
+		shellPoints.append( shellPointBuffer.duplicate() )
+		if shellPointBuffer.size() == 1:
+			i = -1
+		else:
+			i += 1
+			shellPointBuffer.clear()
+
+	for j: int in shellPoints.size():
+		for k: int in shellPoints[j].size() - 1:
+			draw_line( shellPoints[j][k], shellPoints[j][ k + 1 ], shellColor, shellWidth )	
+	
+	draw_circle( shellPoints.back()[0], pointRadius, pointColor )
+
+
+	
+
+func DrawBBForm() -> void:
+	pass
+	
+func DrawMS() -> void:
+	pass
 
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", Clear )
@@ -61,9 +102,14 @@ func _process( _delta: float ) -> void:
 
 func _draw() -> void:
 	for point: Vector2 in points:
-		draw_circle( point, 5, Color.RED )
+		draw_circle( point, pointRadius, pointColor )
 
-	if style == DrawStyle.NLI:
-		for i: int in points.size() - 1:
-			draw_line( points[i], points[ i + 1 ], Color( 0, 0, 1, .25 ), 2 )
-			pass
+	match style:
+		DrawStyle.NLI:
+			DrawNLI()
+		
+		DrawStyle.BBForm:
+			DrawBBForm()
+
+		DrawStyle.MidpointSubdivision:
+			DrawMS()
