@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkxufew0ta5hl"]
+[gd_scene load_steps=5 format=3 uid="uid://dkxufew0ta5hl"]
 
 [ext_resource type="PackedScene" uid="uid://ckj7iynudrlqj" path="res://Scenes/UI_MasterHeader.tscn" id="2_dwb11"]
 [ext_resource type="Script" uid="uid://cnhkgnqdic35g" path="res://Scenes/SplineRegion.gd" id="2_scax6"]
+[ext_resource type="Script" uid="uid://bdef06lxpoexs" path="res://Scripts/menu_button.gd" id="3_dwb11"]
+[ext_resource type="Script" uid="uid://1hel0rc3d1en" path="res://Scripts/h_slider.gd" id="3_mw5d8"]
 
 [node name="ControlRoot" type="CanvasLayer"]
 
@@ -20,11 +22,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer" node_paths=PackedStringArray("masterHeader")]
+[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer" node_paths=PackedStringArray("masterHeader", "menuButton", "slider")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_scax6")
 masterHeader = NodePath("../../UI_MasterHeader")
+menuButton = NodePath("../../ColorRect/FooterContainer_HBox/FormButton")
+slider = NodePath("../../ColorRect/FooterContainer_HBox/HSlider")
 
 [node name="ColorRect" type="PanelContainer" parent="FullContainer_VBox"]
 custom_minimum_size = Vector2(0, 30)
@@ -33,7 +37,34 @@ layout_mode = 2
 [node name="FooterContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox/ColorRect"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-alignment = 1
+size_flags_horizontal = 4
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(577, 325)
+[node name="Label" type="Label" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
+layout_mode = 2
+text = "t:"
+
+[node name="HSlider" type="HSlider" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("3_mw5d8")
+
+[node name="FormButton" type="MenuButton" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "BB-Form"
+switch_on_hover = true
+item_count = 3
+popup/item_0/text = "NLI"
+popup/item_0/id = 0
+popup/item_1/text = "BB-Form"
+popup/item_1/id = 1
+popup/item_2/text = "MS"
+popup/item_2/id = 2
+script = ExtResource("3_dwb11")
+
+[connection signal="value_changed" from="FullContainer_VBox/ColorRect/FooterContainer_HBox/HSlider" to="FullContainer_VBox/ColorRect/FooterContainer_HBox/HSlider" method="_on_value_changed"]

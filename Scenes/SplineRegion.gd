@@ -3,9 +3,13 @@ class_name SplineRegion
 extends TextureRect 
 
 @export var masterHeader: Control
+@export var menuButton: MenuButton
+@export var slider: HSlider
 @export var granularity: int = 100
 @export var pointColor: Color = Color.RED
 @export var pointRadius: float = 5
+@export var splineColor: Color = Color.BLACK
+@export var splineWidth: float = 5
 @export var shellColor: Color = Color( 0, 0, 1, .25 )
 @export var shellWidth: float = 2
 
@@ -20,12 +24,17 @@ enum DrawStyle
 
 var style: DrawStyle = DrawStyle.NLI
 var points: Array[Vector2]
+var splinePoints: Array[Vector2]
 var isDragging: bool = false
 var dragPointRef: int
 var t: float = 0.5
 
 func Clear() -> void:
 	points.clear()
+	queue_redraw()
+
+func UpdateT( value: float ) -> void:
+	t = value
 	queue_redraw()
 
 func GetNearestPointRef( point: Vector2 ) -> int:
@@ -67,6 +76,29 @@ func DrawNLI() -> void:
 	
 	draw_circle( shellPoints.back()[0], pointRadius, pointColor )
 
+	splinePoints.clear()
+	splinePoints.append( points[0] )
+	var step: float = 1 / float(granularity)
+	var ti: float = step
+
+	while ti < 1.0:
+		var pointsBuff1: Array[Vector2]
+		pointsBuff1.append_array(points)
+
+		while( pointsBuff1.size() > 1 ):
+			var pointsBuff2: Array[Vector2]
+			
+			for j: int in pointsBuff1.size() - 1:
+				pointsBuff2.append( lerp( pointsBuff1[j], pointsBuff1[ j + 1 ], ti ) )
+
+			pointsBuff1.clear()
+			pointsBuff1.append_array(pointsBuff2)
+		
+		splinePoints.append( pointsBuff1[0] )
+		ti += step
+
+	splinePoints.append( points.back() )
+	
 
 	
 
@@ -78,6 +110,7 @@ func DrawMS() -> void:
 
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", Clear )
+	slider.SliderUpdate.connect(UpdateT)
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left click"):
@@ -101,9 +134,6 @@ func _process( _delta: float ) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	for point: Vector2 in points:
-		draw_circle( point, pointRadius, pointColor )
-
 	match style:
 		DrawStyle.NLI:
 			DrawNLI()
@@ -113,3 +143,9 @@ func _draw() -> void:
 
 		DrawStyle.MidpointSubdivision:
 			DrawMS()
+
+	for i: int in splinePoints.size() - 1:
+		draw_line( splinePoints[i], splinePoints[ i + 1 ], splineColor, splineWidth )
+
+	for point: Vector2 in points:
+		draw_circle( point, pointRadius, pointColor )
