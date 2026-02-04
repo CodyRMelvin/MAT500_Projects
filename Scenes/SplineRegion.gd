@@ -31,6 +31,7 @@ var t: float = 0.5
 
 func Clear() -> void:
 	points.clear()
+	splinePoints.clear()
 	queue_redraw()
 
 func UpdateT( value: float ) -> void:
@@ -126,6 +127,7 @@ func _gui_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("middle click") && !points.is_empty():
 		points.remove_at( GetNearestPointRef( event.position ) )
+		splinePoints.clear()
 		queue_redraw()
 		
 func _process( _delta: float ) -> void:
