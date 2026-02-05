@@ -38,6 +38,11 @@ func UpdateT( value: float ) -> void:
 	t = value
 	queue_redraw()
 
+func UpdateDrawMode( id: int ) -> void:
+	style = id as DrawStyle
+	splinePoints.clear()
+	queue_redraw()
+
 func GetNearestPointRef( point: Vector2 ) -> int:
 	var distance: float = 1.79769e308
 	var chosenPointRef: int = 0;
@@ -100,9 +105,6 @@ func DrawNLI() -> void:
 
 	splinePoints.append( points.back() )
 	
-
-	
-
 func DrawBBForm() -> void:
 	pass
 	
@@ -112,6 +114,7 @@ func DrawMS() -> void:
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", Clear )
 	slider.SliderUpdate.connect(UpdateT)
+	menuButton.StyleChange.connect(UpdateDrawMode)
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left click"):
