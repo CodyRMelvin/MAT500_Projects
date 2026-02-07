@@ -31,7 +31,6 @@ masterHeader = NodePath("../../UI_MasterHeader")
 menuButton = NodePath("../../ColorRect/FooterContainer_HBox/FormButton")
 slider = NodePath("../../ColorRect/FooterContainer_HBox/HSlider")
 spinBox = NodePath("../../ColorRect/FooterContainer_HBox/SpinBox")
-granularity = 10
 
 [node name="ColorRect" type="PanelContainer" parent="FullContainer_VBox"]
 custom_minimum_size = Vector2(0, 30)
