@@ -203,19 +203,12 @@ func DrawMS() -> void:
 		return
 
 	if msDegree == 1:
-		splinePoints = points
+		splinePoints.append_array(points)
 		return
 
 	splinePoints.append_array( MSRecursive( points, msDegree - 1 ) )
 	pass
 		
-	
-	#for i: int in points.size():
-	#	splinePoints.append( InterpolatePoint( points, i, 0, .5 ) )
-
-	#for i: int in range( 1, points.size() ):
-	#	splinePoints.append( InterpolatePoint( points, points.size() - i - 1, i, .5 ) )
-	
 
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", Clear )
