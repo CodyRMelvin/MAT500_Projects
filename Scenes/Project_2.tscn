@@ -56,6 +56,10 @@ step = 0.01
 value = 0.5
 script = ExtResource("3_mw5d8")
 
+[node name="MarginContainer" type="MarginContainer" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
 [node name="MS_Label" type="Label" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
 layout_mode = 2
 text = "MS Degree:"
@@ -66,7 +70,7 @@ min_value = 1.0
 max_value = 10.0
 value = 1.0
 script = ExtResource("4_n8g2v")
-defaultValue = 3
+defaultValue = 4
 
 [node name="FormButton" type="MenuButton" parent="FullContainer_VBox/ColorRect/FooterContainer_HBox"]
 custom_minimum_size = Vector2(75, 0)
