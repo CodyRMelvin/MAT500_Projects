@@ -158,14 +158,37 @@ func InterpolatePoint( pointArray: Array[Vector2], d: int, i: int, t: float ) ->
 
 		var pointBuffer2: Array[Vector2]
 
-		for k: int in range( i, pointBuffer1.size() - 1 ):
-			pointBuffer2.append( lerp( pointBuffer1[k], pointBuffer1[ k + 1 ], .5 ) )
+		for k: int in pointBuffer1.size() - 1:
+			pointBuffer2.append( lerp( pointBuffer1[k], pointBuffer1[ k + 1 ], t ) )
 
 		pointBuffer1.clear()
 		pointBuffer1.append_array(pointBuffer2)
 
 	return pointBuffer1[i]
 	
+func MSRecursive( pointArray: Array[Vector2], depth: int ) -> Array[Vector2]:
+	if depth == 0:
+		return pointArray
+
+	var returnArray: Array[Vector2]
+	var buffer1: Array[Vector2]
+	var buffer2: Array[Vector2]
+	
+	for i: int in pointArray.size():
+		buffer1.append( InterpolatePoint( pointArray, i, 0, .5 ) )
+
+	buffer1 = MSRecursive( buffer1, depth - 1 )
+
+	for i: int in range( 0, pointArray.size() ):
+		buffer2.append( InterpolatePoint( pointArray, pointArray.size() - i - 1, i, .5 ) )
+	
+	buffer2 = MSRecursive( buffer2, depth - 1 )
+
+	returnArray.append_array(buffer1)
+	returnArray.pop_back()
+	returnArray.append_array(buffer2)
+
+	return returnArray
 	
 func DrawMS() -> void:
 	if points.size() < 2:
@@ -177,8 +200,16 @@ func DrawMS() -> void:
 	if msDegree == 1:
 		splinePoints = points
 		return
-	
 
+	splinePoints.append_array( MSRecursive( points, msDegree - 1 ) )
+	pass
+		
+	
+	#for i: int in points.size():
+	#	splinePoints.append( InterpolatePoint( points, i, 0, .5 ) )
+
+	#for i: int in range( 1, points.size() ):
+	#	splinePoints.append( InterpolatePoint( points, points.size() - i - 1, i, .5 ) )
 	
 
 func _ready() -> void:
@@ -223,7 +254,34 @@ func _draw() -> void:
 
 	for i: int in splinePoints.size() - 1:
 		draw_line( splinePoints[i], splinePoints[ i + 1 ], splineColor, splineWidth )
+		# draw_circle( splinePoints[i], pointRadius * 2, Color.WHITE )
 
 
 	for point: Vector2 in points:
 		draw_circle( point, pointRadius, pointColor )
+
+# var pointArrays := [ [ ] ]
+# var d: int = points.size()
+# pointArrays.resize( ( pow( 2, msDegree - 1 ) * ( d - 1 ) ) / 3 ) 
+# pointArrays.fill( [] )
+# var pointBuffer1: Array[Vector2]
+# pointBuffer1.append_array(points)
+
+# for i: int in msDegree:
+# 	var pointBuffer2: Array[Vector2]
+
+# 	for k: int in pointArrays.size():
+
+# 		if pointArrays[k].size() == 0:
+# 			continue
+
+# 		for j: int in pointBuffer1.size():
+# 			pointBuffer2.append( InterpolatePoint( pointBuffer1, j, 0, .5 ) )
+
+# 		for j: int in range( 1, pointBuffer1.size() ):
+# 			pointBuffer2.append( InterpolatePoint( pointBuffer1, pointBuffer1.size() - j - 1, j, .5 ) )
+
+# 	for j: int in i:
+# 		pointArrays[i].clear()
+# 		for l: int in range( j * ( d - 1 ), j * ( d - 1 ) + d ):
+# 			pointArrays[j].append( pointBuffer2[l] )
