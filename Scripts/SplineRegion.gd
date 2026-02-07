@@ -5,6 +5,7 @@ extends TextureRect
 @export var masterHeader: Control
 @export var menuButton: MenuButton
 @export var slider: HSlider
+@export var spinBox: SpinBox
 @export var granularity: int = 100
 @export var pointColor: Color = Color.RED
 @export var pointRadius: float = 5
@@ -28,7 +29,7 @@ var splinePoints: Array[Vector2]
 var isDragging: bool = false
 var dragPointRef: int
 var t: float = 0.5
-const msDegree: int = 3
+var msDegree: int = 3
 
 func Clear() -> void:
 	points.clear()
@@ -42,6 +43,10 @@ func UpdateT( value: float ) -> void:
 func UpdateDrawMode( id: int ) -> void:
 	style = id as DrawStyle
 	splinePoints.clear()
+	queue_redraw()
+
+func UpdateMSDegree( value: int ) -> void:
+	msDegree = value
 	queue_redraw()
 
 func GetNearestPointRef( point: Vector2 ) -> int:
@@ -216,6 +221,8 @@ func _ready() -> void:
 	masterHeader.connect( "ClearScreen", Clear )
 	slider.SliderUpdate.connect(UpdateT)
 	menuButton.StyleChange.connect(UpdateDrawMode)
+	spinBox.SpinBoxUpdate.connect(UpdateMSDegree)
+	msDegree = int(spinBox.value)
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left click"):
@@ -254,34 +261,6 @@ func _draw() -> void:
 
 	for i: int in splinePoints.size() - 1:
 		draw_line( splinePoints[i], splinePoints[ i + 1 ], splineColor, splineWidth )
-		# draw_circle( splinePoints[i], pointRadius * 2, Color.WHITE )
-
 
 	for point: Vector2 in points:
 		draw_circle( point, pointRadius, pointColor )
-
-# var pointArrays := [ [ ] ]
-# var d: int = points.size()
-# pointArrays.resize( ( pow( 2, msDegree - 1 ) * ( d - 1 ) ) / 3 ) 
-# pointArrays.fill( [] )
-# var pointBuffer1: Array[Vector2]
-# pointBuffer1.append_array(points)
-
-# for i: int in msDegree:
-# 	var pointBuffer2: Array[Vector2]
-
-# 	for k: int in pointArrays.size():
-
-# 		if pointArrays[k].size() == 0:
-# 			continue
-
-# 		for j: int in pointBuffer1.size():
-# 			pointBuffer2.append( InterpolatePoint( pointBuffer1, j, 0, .5 ) )
-
-# 		for j: int in range( 1, pointBuffer1.size() ):
-# 			pointBuffer2.append( InterpolatePoint( pointBuffer1, pointBuffer1.size() - j - 1, j, .5 ) )
-
-# 	for j: int in i:
-# 		pointArrays[i].clear()
-# 		for l: int in range( j * ( d - 1 ), j * ( d - 1 ) + d ):
-# 			pointArrays[j].append( pointBuffer2[l] )
