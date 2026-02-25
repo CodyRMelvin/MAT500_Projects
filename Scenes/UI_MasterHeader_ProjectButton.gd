@@ -1,7 +1,7 @@
 extends MenuButton
 
-var project2Scene = preload("res://Scenes/Project_2.tscn").instantiate()
-var project3Scene = preload("res://Scenes/Project_3.tscn").instantiate()
+var project2Scene = "res://Scenes/Project_2.tscn"
+var project3Scene = "res://Scenes/Project_3.tscn"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11,6 +11,6 @@ func _ready() -> void:
 func _on_pressed( id: int ) -> void:
 	match id:
 		2:
-			get_tree().change_scene_to_node(project2Scene)
+			get_tree().change_scene_to_file(project2Scene)
 		3:
-			get_tree().change_scene_to_node(project3Scene)
+			get_tree().change_scene_to_file(project3Scene)
