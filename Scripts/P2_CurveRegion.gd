@@ -1,4 +1,4 @@
-class_name SplineRegion
+class_name P2_CurveRegion
 
 extends TextureRect 
 
@@ -31,7 +31,7 @@ var dragPointRef: int
 var t: float = 0.5
 var msDegree: int = 3
 
-func Clear() -> void:
+func ClearP2() -> void:
 	points.clear()
 	splinePoints.clear()
 	queue_redraw()
@@ -211,7 +211,7 @@ func DrawMS() -> void:
 		
 
 func _ready() -> void:
-	masterHeader.connect( "ClearScreen", Clear )
+	masterHeader.connect( "ClearScreen", ClearP2 )
 	slider.SliderUpdate.connect(UpdateT)
 	menuButton.StyleChange.connect(UpdateDrawMode)
 	spinBox.SpinBoxUpdate.connect(UpdateMSDegree)

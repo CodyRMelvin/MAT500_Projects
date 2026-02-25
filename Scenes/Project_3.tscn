@@ -1,5 +1,41 @@
 [gd_scene format=3 uid="uid://mjxnr8rsr6hc"]
 
-[node name="Node2D" type="Control" unique_id=1870549765]
-layout_mode = 3
-anchors_preset = 0
+[ext_resource type="PackedScene" uid="uid://ckj7iynudrlqj" path="res://Scenes/UI_MasterHeader.tscn" id="1_gnm2i"]
+[ext_resource type="Script" uid="uid://bqvpu4h1s5qi1" path="res://Scripts/P3_CurveRegion.gd" id="2_gnm2i"]
+
+[node name="ControlRoot" type="CanvasLayer" unique_id=159397495]
+
+[node name="FullContainer_VBox" type="VBoxContainer" parent="." unique_id=1759127413]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UI_MasterHeader" parent="FullContainer_VBox" unique_id=1947839199 instance=ExtResource("1_gnm2i")]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="FullContainer_VBox" unique_id=800718038]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer" unique_id=1643644732 node_paths=PackedStringArray("masterHeader")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_gnm2i")
+masterHeader = NodePath("../../UI_MasterHeader")
+granularity = null
+pointColor = null
+pointRadius = null
+splineColor = null
+splineWidth = null
+
+[node name="ColorRect" type="PanelContainer" parent="FullContainer_VBox" unique_id=2037756009]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="FooterContainer_HBox" type="HBoxContainer" parent="FullContainer_VBox/ColorRect" unique_id=1361047995]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 4
