@@ -12,16 +12,16 @@ extends TextureRect
 @onready var camera: Camera2D = get_viewport().get_camera_2d()
 
 var points: Array[Vector2]
-var newtonPoints: Array[Vector2]
 var splinePoints: Array[Vector2]
 var gCache: Array[Vector2]
+var newtonIndices: Array[int]
 var isDragging: bool = false
 var dragPointRef: int
 var msDegree: int = 3
 
 func ClearP3() -> void:
 	points.clear()
-	newtonPoints.clear()
+	newtonIndices.clear()
 	splinePoints.clear()
 	queue_redraw()
 
@@ -55,12 +55,12 @@ func BracketGRecursive( pointArray: Array[Vector2] ) -> float:
 	
 	return 0
 
-func BracketG( pointArray: Array[Vector2] ) -> Vector2:
+func BracketG( count: int ) -> Vector2:
 	var xs: Array[Vector2]
 	var ys: Array[Vector2]
-	for i: int in pointArray.size():
-		xs.push_back( Vector2( i, pointArray[i].x ) )
-		ys.push_back( Vector2( i, pointArray[i].y ) )
+	for i: int in count:
+		xs.push_back( Vector2( newtonIndices[i], points[ newtonIndices[i] ].x ) )
+		ys.push_back( Vector2( newtonIndices[i], points[ newtonIndices[i] ].y ) )
 
 	var y: float = BracketGRecursive(ys)
 	var x: float = BracketGRecursive(xs)
@@ -68,12 +68,13 @@ func BracketG( pointArray: Array[Vector2] ) -> Vector2:
 
 func ResetGCache() -> void:
 	gCache.clear()
-	for i in newtonPoints.size() - 1:
-		var tempArray: Array[Vector2]
-		tempArray.append_array(newtonPoints)
-		tempArray.resize( newtonPoints.size() - i )
-		gCache.push_back( BracketG(tempArray) )
-	gCache.push_back( newtonPoints.front() )
+	if points.size() < 2:
+		return
+
+	for i: int in range( points.size(), 1, -1 ):
+		gCache.push_back( BracketG(i) )
+
+	gCache.push_back( points[ newtonIndices[0] ] )
 
 
 func NewtonInterpolation() -> void:
@@ -85,10 +86,10 @@ func NewtonInterpolation() -> void:
 	for t: int in range( 1, granularity * ( points.size() - 1 ) ):
 			var pointBuffer: Vector2 = Vector2.ZERO
 
-			for j: int in gCache.size():
+			for j: int in points.size():
 				var pointBuffer2: Vector2 = gCache[ gCache.size() - 1 - j ]
 				for k: int in range( 0, j ):
-					pointBuffer2 *= ( t * step - k )
+					pointBuffer2 *= ( t * step - newtonIndices[k] )
 
 				pointBuffer += pointBuffer2
 
@@ -99,21 +100,35 @@ func NewtonInterpolation() -> void:
 
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", ClearP3 )
+	points.push_back( Vector2( 100, 100 ) )
+	points.push_back( Vector2( 200, 200 ) )
+	points.push_back( Vector2( 300, 0 ) )
+	newtonIndices.push_back(0)
+	newtonIndices.push_back(1)
+	newtonIndices.push_back(2)
+	ResetGCache()
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left click"):
 		points.append( event.position )
-		newtonPoints.clear()
-		newtonPoints.append_array(points)
+
+		newtonIndices.clear()
+		for i: int in points.size():
+			newtonIndices.push_back(i)
+
 		ResetGCache()
 		queue_redraw()
 
 	if event.is_action_pressed("right click") && !points.is_empty():
 		dragPointRef =  GetNearestPointRef(event.position)
 		if !isDragging:
-			var temp: Vector2 = newtonPoints[dragPointRef]
-			newtonPoints.remove_at(dragPointRef)
-			newtonPoints.push_back(temp)
+
+			newtonIndices.clear()
+			for i: int in points.size():
+				newtonIndices.push_back(i)
+
+			newtonIndices.remove_at(dragPointRef)
+			newtonIndices.append(dragPointRef)
 			ResetGCache()
 
 		isDragging = true
@@ -123,8 +138,11 @@ func _gui_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("middle click") && !points.is_empty():
 		points.remove_at( GetNearestPointRef( event.position ) )
-		newtonPoints.clear()
-		newtonPoints.append_array(points)
+
+		newtonIndices.clear()
+		for i: int in points.size():
+			newtonIndices.push_back(i)
+
 		splinePoints.clear()
 		ResetGCache()
 		queue_redraw()
@@ -132,7 +150,7 @@ func _gui_input(event: InputEvent) -> void:
 func _process( _delta: float ) -> void:
 	if isDragging:
 		points[dragPointRef] = get_local_mouse_position()
-		gCache[ gCache.size() - 1 ] = BracketG(newtonPoints)
+		gCache[0] = BracketG( points.size() )
 		queue_redraw()
 
 func _draw() -> void:
