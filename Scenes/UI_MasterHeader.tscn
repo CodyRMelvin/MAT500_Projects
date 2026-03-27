@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b01kfr1xheldj" path="res://Scripts/ui_master_header.gd" id="1_a2i4h"]
 [ext_resource type="Script" uid="uid://ctit4qkn4qvxy" path="res://Scripts/ClearButton.gd" id="1_gg4m4"]
-[ext_resource type="Script" uid="uid://dpay8h0fbbbig" path="res://Scenes/UI_MasterHeader_ProjectButton.gd" id="3_4j1kc"]
+[ext_resource type="Script" uid="uid://dpay8h0fbbbig" path="res://Scripts/UI_MasterHeader_ProjectButton.gd" id="3_4j1kc"]
 
 [node name="UI_MasterHeader" type="Control" unique_id=849838592]
 layout_mode = 3
@@ -39,11 +39,13 @@ root = NodePath("../../../..")
 [node name="MenuButton" type="MenuButton" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=2117379519]
 layout_mode = 2
 text = "Project"
-item_count = 2
+item_count = 3
 popup/item_0/text = "2"
 popup/item_0/id = 2
 popup/item_1/text = "3"
 popup/item_1/id = 3
+popup/item_2/text = "4"
+popup/item_2/id = 4
 script = ExtResource("3_4j1kc")
 
 [connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/Button" to="PanelContainer/MarginContainer/HBoxContainer/Button" method="_on_pressed"]

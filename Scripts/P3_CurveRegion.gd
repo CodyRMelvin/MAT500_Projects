@@ -100,12 +100,6 @@ func NewtonInterpolation() -> void:
 
 func _ready() -> void:
 	masterHeader.connect( "ClearScreen", ClearP3 )
-	points.push_back( Vector2( 100, 100 ) )
-	points.push_back( Vector2( 200, 200 ) )
-	points.push_back( Vector2( 300, 0 ) )
-	newtonIndices.push_back(0)
-	newtonIndices.push_back(1)
-	newtonIndices.push_back(2)
 	ResetGCache()
 
 func _gui_input(event: InputEvent) -> void:
