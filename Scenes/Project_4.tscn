@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bf1jbib8m2845"]
+
+[ext_resource type="PackedScene" uid="uid://ckj7iynudrlqj" path="res://Scenes/UI_MasterHeader.tscn" id="1_ssbv8"]
+[ext_resource type="Script" uid="uid://7wrclfdjr53g" path="res://Scripts/P4_CurveRegion.gd" id="2_ssbv8"]
+
+[node name="ControlRoot" type="CanvasLayer" unique_id=159397495]
+
+[node name="FullContainer_VBox" type="VBoxContainer" parent="." unique_id=1759127413]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UI_MasterHeader" parent="FullContainer_VBox" unique_id=1947839199 instance=ExtResource("1_ssbv8")]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BoxContainer" type="BoxContainer" parent="FullContainer_VBox" unique_id=800718038]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="FullContainer_VBox/BoxContainer" unique_id=1643644732 node_paths=PackedStringArray("masterHeader")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_ssbv8")
+masterHeader = NodePath("../../UI_MasterHeader")
